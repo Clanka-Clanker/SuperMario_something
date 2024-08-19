@@ -4,30 +4,47 @@ using UnityEngine;
 
 public class Pickup : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public enum PickupType
     {
-        
+        Life,
+        PowerupJump,
+        PowerupSpeed,
+        Score
     }
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField] private PickupType type;
+
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Player"))
+    //    {
+    //        Destroy(gameObject);
+    //        // Perform actions when the player collects the object
+    //        // Add score, play a sound, or activate a power-up
+    //        //Collect();
+    //    }
+    //}
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        
-    }
-
-
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Player"))
+        if (collider.CompareTag("Player"))
         {
+            NewBehaviourScript pc = collider.GetComponent<NewBehaviourScript>();
+
+            switch (type)
+            {
+                case PickupType.Life:
+                    pc.lives++;
+                    break;
+                case PickupType.PowerupJump:
+                case PickupType.PowerupSpeed:
+                    pc.PowerupValueChange(type);
+                    break;
+                case PickupType.Score:
+                    break;
+
+            }
             Destroy(gameObject);
         }
-
     }
-
-
-
 
 }
